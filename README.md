@@ -1,62 +1,30 @@
 # Tokko MCP Server — Renova Finarca
 
-MCP server para conectar Claude con la API de Tokko Broker.
-
-## Herramientas disponibles
-
-| Tool | Descripción |
-|------|-------------|
-| `tokko_listar_propiedades` | Lista el inventario completo con paginación |
-| `tokko_detalle_propiedad` | Ficha completa de una propiedad por ID |
-| `tokko_buscar_propiedades` | Búsqueda filtrada por precio, tipo, recámaras, operación |
-| `tokko_resumen_mercado` | Estadísticas: precio promedio/min/max por operación |
-
----
+MCP server que conecta Claude con tu CRM Tokko Broker via API REST.
 
 ## Deploy en Railway
 
-### 1. Crear proyecto en Railway
+1. Sube este repo a GitHub
+2. En Railway: New Project → Deploy from GitHub
+3. En Variables de entorno agrega:
+   - `TOKKO_API_KEY` = tu API key de Tokko
+   - `PORT` = 3000 (Railway lo setea automático)
+4. Una vez deployado, copia la URL pública (ej. `https://tokko-mcp-server.up.railway.app`)
 
-1. Ir a [railway.app](https://railway.app) → New Project → Deploy from GitHub Repo
-2. O usar Railway CLI: `railway init`
+## Conectar en Claude.ai
 
-### 2. Configurar variable de entorno
+En Settings → Integrations → Add MCP Server:
+- URL: `https://tu-dominio.up.railway.app/mcp`
+- Name: `Tokko Broker`
 
-En Railway > Variables, agregar:
-```
-TOKKO_API_KEY=tu_api_key_de_tokko
-```
+## Herramientas disponibles
 
-### 3. Railway detecta automáticamente el `package.json`
+- `tokko_list_properties` — Lista todas las propiedades
+- `tokko_search_properties` — Busca por precio, tipo, operación
+- `tokko_get_property` — Detalle completo de una propiedad por ID
+- `tokko_market_summary` — Estadísticas del inventario (precio promedio, m², etc.)
+- `tokko_list_developments` — Lista desarrollos/emprendimientos
 
-El build command es `npm run build` y el start es `npm start`.
-Railway lo detecta solo.
+## Health check
 
-### 4. Obtener la URL pública
-
-Railway asigna una URL tipo:
-```
-https://tokko-mcp-server-production.up.railway.app
-```
-
----
-
-## Conectar a Claude.ai
-
-En Claude.ai > Settings > Connectors > Add MCP Server:
-
-```
-URL: https://tu-app.up.railway.app/mcp
-Name: Tokko Broker
-```
-
----
-
-## Desarrollo local
-
-```bash
-npm install
-TOKKO_API_KEY=tu_key npm run dev
-```
-
-Health check: `GET http://localhost:3000/health`
+GET `https://tu-dominio.up.railway.app/health`
